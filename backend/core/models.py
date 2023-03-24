@@ -1,6 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from users.models import User
+# from users.models import User
+
+User = get_user_model()
 
 
 class Tag(models.Model):
@@ -11,7 +14,6 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField('Ingredient', max_length=200)
-#    quantity = models.FloatField()
     measurement_unit = models.CharField(max_length=200)
 
 
@@ -25,15 +27,11 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
         related_name='recipes',
     )
-#    ingredients = models.ManyToOneRel() # 12M + weigth
-    tag = models.ForeignKey(
-        Tag,
-        on_delete=models.CASCADE,
-        related_name='recipes',
-    )
-
-# Ингредиенты
-# Кол-во
+#    tag = models.ForeignKey(
+#        Tag,
+#        on_delete=models.CASCADE,
+#        related_name='recipes',
+#    )
 
 
 class IngredientInRecipe(models.Model):
@@ -59,7 +57,6 @@ class TagInRecipe(models.Model):
         related_name='tags',
 #        verbose_name='Кто подписался'
     )
-    quantity = models.PositiveSmallIntegerField()
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,

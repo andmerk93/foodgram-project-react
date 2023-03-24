@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{{ schema.title }}{% endblock %}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+
+<main>
+    <div class="container">
+        <h1 class="mt-4">{% block header %}В проектe есть такие эндпоинты:{% endblock %}</h1>
+        {% block content %}
+            <table class="table caption-bottom">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">Path</th>
+                  <th scope="col">Method</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for endpoint in schema.endpoints %}
+                <tr>
+                    <th scope="row"> <a href={{ endpoint.path }}>{{ endpoint.path }}</a></th>
+                    <td>{{ endpoint.method }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <caption>Должно соответствовать <a href="/redoc">ReDoc</a></caption>
+            </table>
+        {% endblock %}
+    </div>
+</main>
+
+</body>
+
+</html>

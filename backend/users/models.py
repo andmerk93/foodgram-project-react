@@ -48,3 +48,6 @@ class Favourite(models.Model):
 
     def __str__(self) -> str:
         return f'Fav: {self.user.pk}->{self.favourite.pk}'[:15]
+
+
+# class ShoppingCart(models.Model):
