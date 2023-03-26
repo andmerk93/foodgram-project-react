@@ -21,6 +21,7 @@ from .schema import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', schema),
     path('api/', include('api.urls')),
-    path('', schema)
+    path('', schema),
 ]

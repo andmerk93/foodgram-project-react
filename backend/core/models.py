@@ -7,45 +7,52 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField('Tag', max_length=200)
+    name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200)
     color = models.CharField(max_length=7)
 
 
 class Ingredient(models.Model):
-    name = models.CharField('Ingredient', max_length=200)
+    name = models.CharField(max_length=200)
     measurement_unit = models.CharField(max_length=200)
 
 
 class Recipe(models.Model):
-    name = models.CharField('Recipe', max_length=200)
+    name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='recipes/', null=True, blank=True)
-    cooking_time = models.PositiveSmallIntegerField('Time (min)')
+    cooking_time = models.PositiveSmallIntegerField()
     text = models.TextField()
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='recipes',
     )
-#    tag = models.ForeignKey(
-#        Tag,
+    tags = models.ManyToManyField(
+        Tag,
 #        on_delete=models.CASCADE,
-#        related_name='recipes',
-#    )
+        through='TagInRecipe',
+        related_name='recipes',
+    )
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        through='IngredientInRecipe',
+        related_name='recipes',
+    )
 
 
 class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='recipes',
+        related_name='IngredientInRecipe',
 #        verbose_name='Кто подписался'
     )
-    quantity = models.PositiveSmallIntegerField()
+#    quantity = models.PositiveSmallIntegerField()
+    amount = models.PositiveSmallIntegerField()
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='ingredients',
+        related_name='IngredientInRecipe',
 #        verbose_name='На кого подписался'
     )
 
@@ -54,12 +61,12 @@ class TagInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='tags',
+        related_name='TagInRecipe',
 #        verbose_name='Кто подписался'
     )
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
-        related_name='recipes',
+        related_name='TagInRecipe',
 #        verbose_name='На кого подписался'
     )

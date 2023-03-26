@@ -35,7 +35,7 @@ class Favourite(models.Model):
         related_name='favourite',
 #        verbose_name='Кто подписался'
     )
-    favourite = models.ForeignKey(
+    recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='is_favourite',
@@ -44,10 +44,10 @@ class Favourite(models.Model):
 
     class Meta:
         verbose_name = 'Избранное'
-#        verbose_name_plural = 'Подписки'
+        verbose_name_plural = 'Избранное'
 
     def __str__(self) -> str:
-        return f'Fav: {self.user.pk}->{self.favourite.pk}'[:15]
+        return f'Fav: {self.user.pk}->{self.recipe.pk}'[:15]
 
 
 # class ShoppingCart(models.Model):
