@@ -30,21 +30,16 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
 #        on_delete=models.CASCADE,
-        through='TagInRecipe',
-        related_name='recipes',
-    )
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        through='IngredientInRecipe',
+        through='TagsInRecipe',
         related_name='recipes',
     )
 
 
-class IngredientInRecipe(models.Model):
+class IngredientsInRecipe(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='IngredientInRecipe',
+        related_name='ingredientsinrecipe',
 #        verbose_name='Кто подписался'
     )
 #    quantity = models.PositiveSmallIntegerField()
@@ -52,21 +47,21 @@ class IngredientInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='IngredientInRecipe',
+        related_name='ingredientsinrecipe',
 #        verbose_name='На кого подписался'
     )
 
 
-class TagInRecipe(models.Model):
+class TagsInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='TagInRecipe',
+        related_name='TagsInRecipe',
 #        verbose_name='Кто подписался'
     )
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
-        related_name='TagInRecipe',
+        related_name='TagsInRecipe',
 #        verbose_name='На кого подписался'
     )
