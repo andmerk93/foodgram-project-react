@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-#    'djoser',
+    'rest_framework.authtoken',
+    'djoser',
     'core',
     'users',
     'api',
@@ -129,3 +130,30 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+#        'rest_framework.permissions.IsAuthenticated',
+#        'rest_framework.permissions.AllowAny',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+#        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+DJOSER = {
+    'PERMISSIONS': {
+#        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],  # /me
+        'user_create': ['rest_framework.permissions.AllowAny'],
+#        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
+        'token_create': ['rest_framework.permissions.AllowAny'],  # /login
+#        'token_create': ['rest_framework.permissions.IsAuthenticated'],  # /login
+        'token_destroy': ['rest_framework.permissions.IsAuthenticated'],  # /logout
+    },
+}
