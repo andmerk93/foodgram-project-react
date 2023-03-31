@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
-from rest_framework.filters import SearchFilter
 from djoser.permissions import CurrentUserOrAdminOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 
 from api import serializers
 from core.models import Tag, Ingredient, Recipe
@@ -25,5 +25,5 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.RecipeSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (CurrentUserOrAdminOrReadOnly,)
-    filter_backends = (SearchFilter,)
-#    search_fields = ('following__username',)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('tags',)

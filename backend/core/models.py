@@ -34,6 +34,9 @@ class Recipe(models.Model):
         related_name='recipes',
     )
 
+    class Meta:
+        ordering = ['-id']
+
 
 class IngredientsInRecipe(models.Model):
     ingredient = models.ForeignKey(
