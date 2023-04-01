@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-# from users.models import User
-
 User = get_user_model()
 
 
@@ -11,10 +9,16 @@ class Tag(models.Model):
     slug = models.SlugField(unique=True, max_length=200)
     color = models.CharField(max_length=7)
 
+    def __str__(self):
+        return self.name
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200)
     measurement_unit = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 
 class Recipe(models.Model):
@@ -29,7 +33,6 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-#        on_delete=models.CASCADE,
         through='TagsInRecipe',
         related_name='recipes',
     )
@@ -37,22 +40,29 @@ class Recipe(models.Model):
     class Meta:
         ordering = ['-id']
 
+    def __str__(self):
+        return self.name
+
 
 class IngredientsInRecipe(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
         related_name='ingredientsinrecipe',
-#        verbose_name='Кто подписался'
     )
-#    quantity = models.PositiveSmallIntegerField()
     amount = models.PositiveSmallIntegerField()
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='ingredientsinrecipe',
-#        verbose_name='На кого подписался'
     )
+
+    def __str__(self) -> str:
+        text = (
+            f'IR: {self.amount}x {self.ingredient.name}' +
+            f'->{self.recipe.name}'
+        )
+        return text[:30]
 
 
 class TagsInRecipe(models.Model):
@@ -60,11 +70,12 @@ class TagsInRecipe(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         related_name='TagsInRecipe',
-#        verbose_name='Кто подписался'
     )
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
         related_name='TagsInRecipe',
-#        verbose_name='На кого подписался'
     )
+
+    def __str__(self) -> str:
+        return f'TR: {self.tag.name}->{self.recipe.name}'[:30]

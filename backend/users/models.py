@@ -38,7 +38,7 @@ class Favourite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='is_favourite',
+        related_name='is_favorited',
 #        verbose_name='На кого подписался'
     )
 
