@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-#from rest_framework import permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.serializers import ValidationError
 #from djoser.permissions import CurrentUserOrAdminOrReadOnly
@@ -16,14 +15,14 @@ from users.models import Favourite, Follow, User
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    permission_classes = (AllowAny,)
+#    permission_classes = (AllowAny,)
     pagination_class = None
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = serializers.IngredientSerializer
-    permission_classes = (AllowAny,)
+#    permission_classes = (AllowAny,)
     pagination_class = None
 
 
@@ -38,7 +37,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.SubscriptionSerializer
-    permission_classes = (IsAuthenticated,)
+#    permission_classes = (IsAuthenticated,)
 #    filter_backends = (SearchFilter,)
 #    search_fields = ('following__username',)
 
@@ -48,7 +47,7 @@ class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SubscriptionSerializer
-    permission_classes = (IsAuthenticated,)
+#    permission_classes = (IsAuthenticated,)
     http_method_names = ['post', 'delete']
 
     def get_user(self):
@@ -78,4 +77,3 @@ class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
         instance = get_object_or_404(Follow, user=user, following=following)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-       

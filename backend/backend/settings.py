@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-#        'rest_framework.permissions.IsAuthenticated',
+#        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
 #        'rest_framework.permissions.AllowAny',
     ],
 
@@ -154,8 +154,8 @@ DJOSER = {
         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],  # /me
 #        'user': ['rest_framework.permissions.AllowAny'],
         'user_create': ['rest_framework.permissions.AllowAny'],  # Default
-        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
-#        'user_list': ['rest_framework.permissions.AllowAny'],
+#        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
+        'user_list': ['rest_framework.permissions.AllowAny'],
         'set_password': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
         'token_create': ['rest_framework.permissions.AllowAny'],  # /login  # Default
 #        'token_create': ['rest_framework.permissions.IsAuthenticated'],  # /login
