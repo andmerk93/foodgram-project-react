@@ -151,11 +151,11 @@ DJOSER = {
     'HIDE_USERS': False,
     'LOGIN_FIELD': 'email',
     'PERMISSIONS': {
-#        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],  # /me
-        'user': ['rest_framework.permissions.AllowAny'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],  # /me
+#        'user': ['rest_framework.permissions.AllowAny'],
         'user_create': ['rest_framework.permissions.AllowAny'],  # Default
-#        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
-        'user_list': ['rest_framework.permissions.AllowAny'],
+        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
+#        'user_list': ['rest_framework.permissions.AllowAny'],
         'set_password': ['djoser.permissions.CurrentUserOrAdmin'],  # Default
         'token_create': ['rest_framework.permissions.AllowAny'],  # /login  # Default
 #        'token_create': ['rest_framework.permissions.IsAuthenticated'],  # /login
