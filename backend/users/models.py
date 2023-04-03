@@ -10,13 +10,13 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower',
+        related_name='is_subscribed',
         verbose_name='Кто подписался'
     )
     following = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following',
+        related_name='is_followed',
         verbose_name='На кого подписался'
     )
 
@@ -28,11 +28,11 @@ class Follow(models.Model):
         return f'Flw: {self.user.username}->{self.following.username}'[:30]
 
 
-class Favourite(models.Model):
+class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='favourite',
+        related_name='favorite_list',
     )
     recipe = models.ForeignKey(
         Recipe,

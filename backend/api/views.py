@@ -9,7 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from api import serializers
 from api.permissions import FoodgramCurrentUserOrAdminOrReadOnly
 from core.models import Tag, Ingredient, Recipe
-from users.models import Favourite, Follow, User
+from users.models import Favorite, Follow, User
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -42,7 +42,7 @@ class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
 #    search_fields = ('following__username',)
 
     def get_queryset(self):
-        return self.request.user.follower.all()
+        return self.request.user.is_subscribed.all()
 
 
 class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
@@ -54,7 +54,7 @@ class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
         return get_object_or_404(User, pk=self.kwargs.get('user_id'))
 
     def get_queryset(self):
-        return self.get_user().following.all()
+        return self.get_user().is_followed.all()
 
     def perform_create(self, serializer):
         user = self.request.user

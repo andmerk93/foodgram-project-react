@@ -1,6 +1,6 @@
 from django.contrib.admin import ModelAdmin, site
 
-from .models import Follow, Favourite
+from .models import Follow, Favorite
 
 
 class FollowAdmin(ModelAdmin):
@@ -14,4 +14,4 @@ class FavouriteAdmin(ModelAdmin):
 
 
 site.register(Follow, FollowAdmin)
-site.register(Favourite, FavouriteAdmin)
+site.register(Favorite, FavouriteAdmin)

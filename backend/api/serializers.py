@@ -2,7 +2,7 @@ from rest_framework import serializers
 from djoser.serializers import UserSerializer
 
 from core.models import Tag, Recipe, Ingredient, IngredientsInRecipe
-from users.models import Favourite, Follow, User
+from users.models import Favorite, Follow, User
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class CustomUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-#            'is_subscribed'  # =following
+#            'is_subscribed'  
         )
 
 
