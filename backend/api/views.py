@@ -1,28 +1,26 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from io import StringIO
+from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework import renderers, status, viewsets
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.serializers import ValidationError
-#from djoser.permissions import CurrentUserOrAdminOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 
 from api import serializers
 from api.permissions import FoodgramCurrentUserOrAdminOrReadOnly
 from core.models import Tag, Ingredient, Recipe
-from users.models import Favorite, Follow, User
+from users.models import Favorite, Follow, ShoppingCart, User
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = serializers.TagSerializer
-#    permission_classes = (AllowAny,)
     pagination_class = None
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = serializers.IngredientSerializer
-#    permission_classes = (AllowAny,)
     pagination_class = None
 
 
@@ -47,7 +45,6 @@ class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SubscriptionSerializer
-#    permission_classes = (IsAuthenticated,)
     http_method_names = ['post', 'delete']
 
     def get_user(self):
@@ -77,3 +74,72 @@ class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
         instance = get_object_or_404(Follow, user=user, following=following)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FavoriteViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = serializers.RecipeMinifiedSerializer
+    http_method_names = ['post', 'delete']
+    model = Favorite
+
+    def get_queryset(self):
+        return get_object_or_404(Recipe, id=self.kwargs.get('recipe_id'))
+
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+        recipe = self.get_queryset()
+        if not self.model.objects.filter(user=user, recipe=recipe).exists():
+            self.model.objects.create(user=user, recipe=recipe)
+        serializer = self.get_serializer(recipe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        recipe = self.get_queryset()
+        instance = get_object_or_404(self.model, user=user, recipe=recipe)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ShoppingCartViewSet(FavoriteViewSet):
+    model = ShoppingCart
+
+
+class PlainTextRenderer(renderers.BaseRenderer):
+    media_type = 'text/plain'
+    format = 'txt'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        return data
+
+
+@api_view(['GET'])
+@renderer_classes([PlainTextRenderer])
+def download_shopping_cart(request):
+    user = request.user
+    cart = get_list_or_404(
+        ShoppingCart.objects.select_related('recipe').prefetch_related(
+            'recipe__ingredientsinrecipe'
+        ),
+        user=user
+    )
+    ingredients = []
+    for i in cart:
+        ingredients.extend(
+            i.recipe.ingredientsinrecipe.all()
+        )
+    ingredients_dict = {}
+    for i in ingredients:
+        ingredients_dict[i.ingredient_id] = 0
+    for i in ingredients:
+        ingredients_dict[i.ingredient_id] += i.amount
+    data = StringIO()
+    for i in ingredients_dict:
+        ingredient = Ingredient.objects.get(id=i)
+        text = f'{ingredient.name} ({ingredient.measurement_unit}) —'
+        text += f' {ingredients_dict[i]} \n'
+        data.write(text)
+    data.seek(0)
+    headers = {
+            'Content-Disposition': 'attachment; filename="list.txt"',
+        }
+    return Response(data, status=status.HTTP_200_OK, headers=headers)

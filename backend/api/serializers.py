@@ -2,7 +2,7 @@ from rest_framework import serializers
 from djoser.serializers import UserSerializer
 
 from core.models import Tag, Recipe, Ingredient, IngredientsInRecipe
-from users.models import Favorite, Follow, User
+from users.models import Follow, User
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -59,8 +59,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = '__all__'
-#        fields = ('id', 'name', 'tags')
-#        read_only_fields = ('',)
 
 
 class RecipeMinifiedSerializer(serializers.ModelSerializer):

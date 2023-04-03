@@ -48,4 +48,17 @@ class Favorite(models.Model):
         return f'Fav: {self.user.username}->{self.recipe.name}'[:30]
 
 
-# class ShoppingCart(models.Model):
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='is_in_shopping_cart',
+    )
+
+    def __str__(self) -> str:
+        return f'Shp: {self.user.username}->{self.recipe.name}'[:30]
