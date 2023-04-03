@@ -30,16 +30,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (FoodgramCurrentUserOrAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('tags', 'author', )#'is_favorited', 'is_in_shopping_cart')
+    filterset_fields = (
+        'tags', 'author', 'is_favorited', 'is_in_shopping_cart'
+    )
 
 
 class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.SubscriptionSerializer
-#    filter_backends = (SearchFilter,)
-#    search_fields = ('following__username',)
 
     def get_queryset(self):
-        return self.request.user.is_subscribed.all().select_related('following')
+        user = self.request.user
+        return user.is_subscribed.all().select_related('following')
 
 
 class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
