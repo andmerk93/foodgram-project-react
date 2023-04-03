@@ -35,12 +35,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.SubscriptionSerializer
-#    permission_classes = (IsAuthenticated,)
 #    filter_backends = (SearchFilter,)
 #    search_fields = ('following__username',)
 
     def get_queryset(self):
-        return self.request.user.is_subscribed.all()
+        return self.request.user.is_subscribed.all().select_related('following')
 
 
 class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
