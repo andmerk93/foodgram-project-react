@@ -3,7 +3,7 @@ name: CI/CD yamdb
 on: [push]
 
 jobs:
-  tests:
+  flake8:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,12 +19,22 @@ jobs:
       run: | 
         python -m pip install --upgrade pip 
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-        pip install -r api_yamdb/requirements.txt 
+        pip install -r backend/requirements.txt 
 
-    - name: Test with flake8 and django tests
+    - name: Test with flake8
       run: |
+        echo '[flake8]' > setup.cfg
+        echo 'ignore =' >> setup.cfg
+        echo '    W503' >> setup.cfg
+        echo 'exclude =' >> setup.cfg
+        echo '    tests/,' >> setup.cfg
+        echo '    */migrations/,' >> setup.cfg
+        echo '    venv/,' >> setup.cfg
+        echo '    env/' >> setup.cfg
+        echo 'per-file-ignores =' >> setup.cfg
+        echo '    */settings.py:E501' >> setup.cfg
+        echo 'max-complexity = 10' >> setup.cfg
         python -m flake8
-        python -m pytest
 
   build_and_push:
     runs-on: ubuntu-latest
@@ -42,9 +52,9 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v4.0.0
         with:
-          context: api_yamdb/
+          context: backend/
           push: true
-          tags: andmerk93/yamdb:latest
+          tags: andmerk93/foodgram:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -57,7 +67,7 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-            cd yamdb_final/
+            cd foodgram-project-react/
             git pull
             cd infra/ 
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
@@ -72,8 +82,8 @@ jobs:
             docker compose up --build --force-recreate -d
             docker container prune -f
             docker image prune -f
-            docker compose exec web python manage.py migrate
-            docker compose exec web python manage.py collectstatic --no-input
+            docker compose exec backend python manage.py migrate
+            docker compose exec backend python manage.py collectstatic --no-input
 
   send_message:
     runs-on: ubuntu-latest
