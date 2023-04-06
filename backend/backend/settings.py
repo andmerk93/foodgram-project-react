@@ -1,12 +1,17 @@
+import os
 from pathlib import Path
+
+#from dotenv import load_dotenv
+
+#load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-ox06q_-rarwdwwacce_f5-af=n1ke6%16@x)+d6#ect%3^a4m!'
+SECRET_KEY = os.getenv('SECRET_KEY'),
 
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS'),
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -59,9 +64,22 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+if os.getenv('DB_ENGINE'):
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE'),
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
+        }
+    }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -1,11 +1,11 @@
-from django.contrib.admin import ModelAdmin, site, StackedInline
+from django.contrib.admin import ModelAdmin, site, TabularInline
 from django.contrib.auth.admin import UserAdmin
 
 from .models import Ingredient, IngredientsInRecipe, Recipe, Tag
 from .models import TagsInRecipe, User
 
 
-class RecipeIngredientInline(StackedInline):
+class RecipeIngredientInline(TabularInline):
     model = IngredientsInRecipe
     min_num = 1
 

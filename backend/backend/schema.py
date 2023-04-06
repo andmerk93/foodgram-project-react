@@ -4,7 +4,7 @@ from rest_framework.schemas.openapi import SchemaGenerator
 
 def schema(request):
     """Этот код вам не пригодится, но и удалять его не стоит."""
-    generator = SchemaGenerator(title='YaMDb API')
+    generator = SchemaGenerator(title='Foodgram API')
     getted_schema = generator.get_schema() or {
         'info': {'title': 'YaMDb API'}, 'paths': {}
     }
