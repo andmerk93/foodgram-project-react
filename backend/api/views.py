@@ -1,4 +1,5 @@
 from io import StringIO
+
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import renderers, status, viewsets
 from rest_framework.decorators import api_view, renderer_classes
@@ -118,14 +119,14 @@ def download_shopping_cart(request):
     user = request.user
     cart = get_list_or_404(
         ShoppingCart.objects.select_related('recipe').prefetch_related(
-            'recipe__ingredientsinrecipe'
+            'recipe__ingredients_in_recipe'
         ),
         user=user
     )
     ingredients = []
     for i in cart:
         ingredients.extend(
-            i.recipe.ingredientsinrecipe.all()
+            i.recipe.ingredients_in_recipe.all()
         )
     ingredients_dict = {}
     for i in ingredients:

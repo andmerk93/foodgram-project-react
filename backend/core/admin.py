@@ -1,8 +1,13 @@
-from django.contrib.admin import ModelAdmin, site
+from django.contrib.admin import ModelAdmin, site, StackedInline
 from django.contrib.auth.admin import UserAdmin
 
 from .models import Ingredient, IngredientsInRecipe, Recipe, Tag
 from .models import TagsInRecipe, User
+
+
+class RecipeIngredientInline(StackedInline):
+    model = IngredientsInRecipe
+    min_num = 1
 
 
 class IngredientAdmin(ModelAdmin):
@@ -16,6 +21,7 @@ class RecipeAdmin(ModelAdmin):
     search_fields = ('text', 'name')
     list_editable = ('author', 'name', 'cooking_time')
     list_filter = ('author', 'name', 'tags')
+    inlines = (RecipeIngredientInline,)
 
 
 class TagAdmin(ModelAdmin):

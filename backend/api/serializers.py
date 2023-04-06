@@ -44,12 +44,14 @@ class CustomUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-            'is_subscribed'  
+            'is_subscribed',
         )
 
     def get_is_subscribed(self, obj):
+        result = False
         user = self.context['request'].user
-        result = Follow.objects.filter(user=user, following=obj).exists()
+        if user.is_authenticated:
+            result = Follow.objects.filter(user=user, following=obj).exists()
         return result
 
 
@@ -58,7 +60,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     is_in_shopping_cart = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
     ingredients = IngredientInRecipeSerializer(
-        source='ingredientsinrecipe',
+        source='ingredients_in_recipe',
         many=True
     )
     author = CustomUserSerializer()
@@ -68,8 +70,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validator(self, obj, model):
+        result = False
         user = self.context['request'].user
-        result = model.objects.filter(user=user, recipe=obj).exists()
+        if user.is_authenticated:
+            result = model.objects.filter(user=user, recipe=obj).exists()
         return result
 
     def get_is_favorited(self, obj):
@@ -126,9 +130,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, obj):
-        following_id = self.context['request'].user.id
-        user_id = obj.following_id
-        result = Follow.objects.filter(
-            following_id=following_id, user_id=user_id
+        return Follow.objects.filter(
+            following_id=self.context['request'].user.id,
+            user_id=obj.following_id
         ).exists()
-        return result

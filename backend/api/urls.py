@@ -13,25 +13,25 @@ api_router.register('recipes', views.RecipeViewSet, basename='recipe')
 
 urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
-    path("users/", UserViewSet.as_view({"get": "list"}), name="user_list"),
+    path('users/', UserViewSet.as_view({'get': 'list'}), name='user_list'),
     path(
-        'users/', UserViewSet.as_view({'post': 'create'}), name="user_create"
+        'users/', UserViewSet.as_view({'post': 'create'}), name='user_create'
     ),
-    path('users/me/', UserViewSet.as_view({'get': 'me'}), name="current_user"),
+    path('users/me/', UserViewSet.as_view({'get': 'me'}), name='current_user'),
     path(
-        "users/set_password/",
-        UserViewSet.as_view({"post": "set_password"}),
-        name="set_password"
-    ),
-    path(
-        "users/subscribtions/",
-        views.SubscriptionListViewSet.as_view({"get": "list"}),
-        name="subscriptions_list"
+        'users/set_password/',
+        UserViewSet.as_view({'post': 'set_password'}),
+        name='set_password'
     ),
     path(
-        "users/<str:id>/",
-        UserViewSet.as_view({"get": "retrieve"}),
-        name="user"
+        'users/subscribtions/',
+        views.SubscriptionListViewSet.as_view({'get': 'list'}),
+        name='subscriptions_list'
+    ),
+    path(
+        'users/<str:id>/',
+        UserViewSet.as_view({'get': 'retrieve'}),
+        name='user'
     ),
     path(
         'recipes/download_shopping_cart/',
@@ -43,21 +43,21 @@ urlpatterns = [
         views.SubscriptionCreateDestroyViewSet.as_view(
             {'post': 'create', 'delete': 'delete'}
         ),
-        name="subscription_create_delete"
+        name='subscription_create_delete'
     ),
     re_path(
         r'recipes/(?P<recipe_id>[\d]+)/favorite/',
         views.FavoriteViewSet.as_view(
             {'post': 'create', 'delete': 'delete'}
         ),
-        name="favorite_create_delete"
+        name='favorite_create_delete'
     ),
     re_path(
         r'recipes/(?P<recipe_id>[\d]+)/shopping_cart/',
         views.ShoppingCartViewSet.as_view(
             {'post': 'create', 'delete': 'delete'}
         ),
-        name="shopping_cart_create_delete"
+        name='shopping_cart_create_delete'
     ),
     path('', include(api_router.urls),),
 ]

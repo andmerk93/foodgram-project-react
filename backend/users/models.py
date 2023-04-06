@@ -21,6 +21,7 @@ class Follow(models.Model):
     )
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
@@ -41,6 +42,7 @@ class Favorite(models.Model):
     )
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
 
@@ -59,6 +61,11 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name='is_in_shopping_cart',
     )
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Покупки'
+        verbose_name_plural = 'Покупки'
 
     def __str__(self) -> str:
         return f'Shp: {self.user.username}->{self.recipe.name}'[:30]
