@@ -87,8 +87,8 @@ class IngredientsInRecipe(models.Model):
 
     def __str__(self) -> str:
         text = (
-            f'IR: {self.amount}x {self.ingredient.name}' +
-            f'->{self.recipe.name}'
+            f'IR: {self.amount}x {self.ingredient.name}'
+            + f'->{self.recipe.name}'
         )
         return text[:30]
 
