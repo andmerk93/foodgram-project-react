@@ -1,4 +1,4 @@
-name: CI/CD yamdb
+name: CI/CD foodgram
 
 on: [push]
 
