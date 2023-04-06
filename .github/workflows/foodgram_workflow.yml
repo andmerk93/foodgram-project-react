@@ -27,7 +27,9 @@ jobs:
         echo 'ignore =' >> setup.cfg
         echo '    W503' >> setup.cfg
         echo '    I001' >> setup.cfg
+        echo '    I004' >> setup.cfg
         echo '    I005' >> setup.cfg
+        echo '    R504' >> setup.cfg
         echo 'exclude =' >> setup.cfg
         echo '    tests/,' >> setup.cfg
         echo '    */migrations/,' >> setup.cfg

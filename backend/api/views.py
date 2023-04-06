@@ -64,8 +64,8 @@ class SubscriptionCreateDestroyViewSet(viewsets.ModelViewSet):
             ).exists()
         ):
             raise ValidationError(
-                'Ошибка: подписка уже создана ' +
-                'или вы пытаетесь подписаться на себя'
+                'Ошибка: подписка уже создана '
+                + 'или вы пытаетесь подписаться на себя'
             )
         serializer.save(following=following, user=user)
 
@@ -141,6 +141,6 @@ def download_shopping_cart(request):
         data.write(text)
     data.seek(0)
     headers = {
-            'Content-Disposition': 'attachment; filename="list.txt"',
-        }
+        'Content-Disposition': 'attachment; filename="list.txt"',
+    }
     return Response(data, status=status.HTTP_200_OK, headers=headers)
