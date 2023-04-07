@@ -62,14 +62,14 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build_and_push
+    needs: flake8
     steps:
     - name: executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USER }}
+        key: ${{ secrets.VM_SSH_KEY }}
         script: |
             cd foodgram-project-react/
             git pull
@@ -91,7 +91,7 @@ jobs:
 
   send_message:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: build_and_push
     steps:
     - name: send message
       uses: appleboy/telegram-action@master
