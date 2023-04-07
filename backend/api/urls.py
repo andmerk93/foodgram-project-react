@@ -24,7 +24,7 @@ urlpatterns = [
         name='set_password'
     ),
     path(
-        'users/subscribtions/',
+        'users/subscriptions/',
         views.SubscriptionListViewSet.as_view({'get': 'list'}),
         name='subscriptions_list'
     ),

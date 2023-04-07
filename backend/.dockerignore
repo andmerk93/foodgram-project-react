@@ -88,4 +88,4 @@ venv/
 # VS Code
 .vscode/
 
-1db.sqlite3
+db.sqlite3
