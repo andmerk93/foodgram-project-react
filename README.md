@@ -1,6 +1,7 @@
 # Foodgram: «Продуктовый помощник»
 
 ![workflows](https://github.com/andmerk93/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
+![workflows](https://github.com/andmerk93/foodgram-project-react/actions/workflows/flake8_workflow.yml/badge.svg)
 
 «Продуктовый помощник» - это сайт, на котором пользователи могут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов. Сервис «Список покупок» позволит пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд.
 

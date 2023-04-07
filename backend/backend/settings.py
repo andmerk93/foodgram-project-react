@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY'),
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS'),
 
-CSRF_TRUSTED_ORIGINS = [f'http://{ALLOWED_HOSTS[0]}', f'https://{ALLOWED_HOSTS[0]}',]
+CSRF_TRUSTED_ORIGINS = [f'http://{ALLOWED_HOSTS[0]}', f'https://{ALLOWED_HOSTS[0]}']
 
 
 INSTALLED_APPS = [
