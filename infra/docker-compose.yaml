@@ -29,7 +29,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/var/html/dstatic/
       - media_volume:/var/html/media/
       - ../frontend/build:/usr/share/nginx/html/

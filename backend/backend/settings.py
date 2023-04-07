@@ -15,6 +15,8 @@ SECRET_KEY = os.getenv('SECRET_KEY'),
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS'),
 
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
