@@ -130,8 +130,8 @@ def download_shopping_cart(request):
         )
     ingredients_dict = {}
     for i in ingredients:
-        ingredients_dict[i.ingredient_id] = 0
-    for i in ingredients:
+        if i.ingredient_id not in ingredients_dict:
+            ingredients_dict[i.ingredient_id] = 0
         ingredients_dict[i.ingredient_id] += i.amount
     data = StringIO()
     for i in ingredients_dict:

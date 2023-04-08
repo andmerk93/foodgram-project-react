@@ -13,9 +13,10 @@ api_router.register('recipes', views.RecipeViewSet, basename='recipe')
 
 urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
-    path('users/', UserViewSet.as_view({'get': 'list'}), name='user_list'),
     path(
-        'users/', UserViewSet.as_view({'post': 'create'}), name='user_create'
+        'users/',
+        UserViewSet.as_view({'post': 'create', 'get': 'list'}),
+        name='user_create_list'
     ),
     path('users/me/', UserViewSet.as_view({'get': 'me'}), name='current_user'),
     path(
