@@ -30,6 +30,7 @@ jobs:
         echo '    I004' >> setup.cfg
         echo '    I005' >> setup.cfg
         echo '    R504' >> setup.cfg
+        echo '    R505' >> setup.cfg
         echo 'exclude =' >> setup.cfg
         echo '    tests/,' >> setup.cfg
         echo '    */migrations/,' >> setup.cfg
