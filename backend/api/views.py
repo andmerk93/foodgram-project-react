@@ -8,8 +8,7 @@ from rest_framework.serializers import ValidationError
 from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 
-from api import serializers
-from api.permissions import FoodgramCurrentUserOrAdminOrReadOnly
+from api import serializers, utils
 from core.models import Tag, Ingredient, Recipe
 from users.models import Favorite, Follow, ShoppingCart, User
 
@@ -32,11 +31,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = serializers.RecipeSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = (FoodgramCurrentUserOrAdminOrReadOnly,)
+    permission_classes = (utils.FoodgramCurrentUserOrAdminOrReadOnly,)
+    pagination_class = utils.PageLimitPagination
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = (
-        'tags', 'author', 'is_favorited', 'is_in_shopping_cart'
-    )
+    filterset_class = utils.RecipeFilter
 
 
 class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
@@ -108,16 +106,8 @@ class ShoppingCartViewSet(FavoriteViewSet):
     model = ShoppingCart
 
 
-class PlainTextRenderer(renderers.BaseRenderer):
-    media_type = 'text/plain'
-    format = 'txt'
-
-    def render(self, data, media_type=None, renderer_context=None):
-        return data
-
-
 @api_view(['GET'])
-@renderer_classes([PlainTextRenderer])
+@renderer_classes([utils.PlainTextRenderer])
 def download_shopping_cart(request):
     user = request.user
     cart = get_list_or_404(
