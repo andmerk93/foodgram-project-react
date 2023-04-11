@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, UserSerializer
+# from drf_base64.fields import Base64ImageField
 
 from core.models import Tag, Recipe, Ingredient, IngredientsInRecipe
 from users.models import Favorite, Follow, ShoppingCart, User
@@ -68,7 +69,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         )
 
 
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipeRetrieveSerializer(serializers.ModelSerializer):
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
@@ -101,6 +102,55 @@ class RecipeMinifiedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
+
+
+class IngredientsListingSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all()
+    )
+    amount = serializers.IntegerField()
+
+    class Meta:
+        model = IngredientsInRecipe
+        fields = ('id', 'amount')
+
+
+class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
+    tags = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Tag.objects.all()
+    )
+    ingredients = IngredientsListingSerializer(
+        many=True,
+        source='ingredients_in_recipe'
+    )
+#    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'ingredients',
+            'tags',
+#            'image',
+            'name',
+            'text',
+            'cooking_time'
+        )
+
+    def create(self, validated_data):
+        tags = validated_data.pop('tags')
+        ingredients = validated_data.pop('ingredients_in_recipe')
+        recipe = Recipe.objects.create(**validated_data)
+        recipe.tags.set(tags)
+#        image = validated_data.pop('image')
+        for ingredient in ingredients:
+            amount = ingredient['amount']
+            ingredient = ingredient['id']
+            IngredientsInRecipe.objects.create(
+                amount=amount, recipe=recipe, ingredient=ingredient
+            )
+        return recipe
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

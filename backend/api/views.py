@@ -29,12 +29,26 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = serializers.RecipeSerializer
+#    serializer_class = serializers.RecipeRetrieveSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (utils.FoodgramCurrentUserOrAdminOrReadOnly,)
     pagination_class = utils.PageLimitPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = utils.RecipeFilter
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'update'):
+            return serializers.RecipeCreateUpdateSerializer
+        return serializers.RecipeRetrieveSerializer
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def perform_update(self, serializer):
+        author = self.request.user
+        id = self.kwargs.get('pk')
+        serializer.save(author=author, id=id)
 
 
 class SubscriptionListViewSet(viewsets.ReadOnlyModelViewSet):
