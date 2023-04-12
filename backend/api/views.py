@@ -1,12 +1,12 @@
 from io import StringIO
 
 from django.shortcuts import get_list_or_404, get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.permissions import AllowAny
-from django_filters.rest_framework import DjangoFilterBackend
 
 from api import serializers, utils
 from core.models import Tag, Ingredient, Recipe
@@ -29,7 +29,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-#    serializer_class = serializers.RecipeRetrieveSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (utils.FoodgramCurrentUserOrAdminOrReadOnly,)
     pagination_class = utils.PageLimitPagination
